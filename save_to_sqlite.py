@@ -3,7 +3,6 @@
 import requests # for scraping
 from bs4 import BeautifulSoup # for scraping
 import os # to save the result file to the system
-import csv # to save the result file to the system
 import time # to set the delay between page scrapes
 import sqlite3 # to save scraped data to sqlite file
 
@@ -48,8 +47,7 @@ tag_id = input("Please enter the HTMLized tag ID (NOT the URL, but part of the U
 last_page = input("Please enter the page # of the last page you want to scrape: ") # the last page to scrape (page # + 1, through some Python quirk I know nothing about)
 #fname = input("What would you like to call your results file: ") # prompt user for what to call the output file
 
-#conn_name = ('/Untitled/Users/ghost/'+fname+'.sqlite') # set the database name string
-conn = sqlite3.connect('spop_01.sqlite') # create connection to the DB
+conn = sqlite3.connect('spop_01.sqlite') # create connection to the DB OR creates DB in current working directory if does not already exist
 cur = conn.cursor() # create the cursor
 
 cur.execute('DROP TABLE IF EXISTS scraped')
@@ -114,7 +112,7 @@ for i in range(1, int(last_page)):
 		work_row = (work_id, title, author, str(fandoms), str(reqtags), str(warnings), str(relationships), str(characters), str(freeforms), pubdate, work_language, word_count, chapter_count, collections_count, comments_count, bookmarks_count, kudos_count, hit_count)
 		# one_page.append(work_row)
 		cur.execute('INSERT INTO scraped VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', work_row,) # insert data
-	conn.commit() # commit after each page (currently row because troubleshooting)
-	time.sleep(8) # sleep for 8 seconds between pings to the server to try not to be a dick
+	conn.commit() # commit after each page 
+	time.sleep(8) # sleep for 8 seconds between pings to the server to try not to be annoying
 
 cur.close()
